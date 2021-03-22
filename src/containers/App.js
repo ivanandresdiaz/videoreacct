@@ -5,47 +5,40 @@ import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
 import Footer from '../components/Footer';
-const App=()=>{
+import useInitialState from '../hooks/useInitialState';
+
+const API='http://localhost:3000/initalState';
+const App= ()=>{
+    const initalState=useInitialState(API);
     return(
         <div className="App">
             <Header/>
             <Search/>
-            <Categories title="Populares hoy">
+            {initalState.trends.length>0 &&(
+            <Categories title="Tendencias">
                 <Carousel>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
+                    {
+                        initalState.trends.map((item)=>{
+                            return(<CarouselItem key={item.id} {...item}/>)
+                        })
+                    }
                 </Carousel>
             </Categories>
-            <Categories title="Clasicas de siempre">
+            )
+            }
+            
+            {initalState.originals.length>0 &&(
+            <Categories title="Originals">
                 <Carousel>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
+                    {
+                        initalState.originals.map((item)=>{
+                            return(<CarouselItem key={item.id} {...item}/>)
+                        })
+                    }
                 </Carousel>
             </Categories>
-            <Categories title="Para niños">
-                <Carousel>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                    <CarouselItem/>
-                </Carousel>
-            </Categories>
+            )
+            }
             <Footer/>
         </div>
     )
