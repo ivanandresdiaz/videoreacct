@@ -6,13 +6,11 @@ import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
 import Footer from '../components/Footer';
 import useInitialState from '../hooks/useInitialState';
-
 const API='http://localhost:3000/initalState';
-const App= ()=>{
+const Home= ()=>{
     const initalState=useInitialState(API);
     return(
         <div className="App">
-            <Header/>
             <Search/>
             {initalState.trends.length>0 &&(
             <Categories title="Tendencias">
@@ -39,8 +37,7 @@ const App= ()=>{
             </Categories>
             )
             }
-            <Footer/>
         </div>
     )
 }
-export default App;
+export default Home;
