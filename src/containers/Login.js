@@ -1,20 +1,51 @@
-import React from 'react';
+import React,{useState} from 'react';
+import {connect} from 'react-redux';
+import {loginRequest} from '../actions/index';
 import {Link} from 'react-router-dom';
 import googleIcon from '../assets/static/google-icon.png';
 import twitterIcon from '../assets/static/twitter-icon.png';
 import '../assets/styles/Login.scss';
-const Login =()=>(
-    <section className="login">
-    <section className="login__container">
-      <h2>Inicia sesión</h2>
-      <form className="login__container--form">
-        <input className="input" type="text" placeholder="Correo"/>
-        <input className="input" type="password" placeholder="Contraseña"/>
-        <Link to="/"className="button">Iniciar sesión</Link>
-        <div className="login__container--remember-me">
-          <label>
-            <input type="checkbox" id="cbox1" value="first_checkbox/"/>Recuérdame
-          </label>
+import Header from '../components/Header';
+const Login =(props)=>{
+  const [form, setValues]=useState({
+    email:'',
+  });
+const handleInput=event=>{
+  setValues({
+    ...form,
+    [event.target.name]:event.target.value,
+  })
+}
+const handleSubmit=event=>{
+  event.preventDefault();
+  props.loginRequest(form);
+  props.history.push('/');
+  console.log(form);
+}
+  return(
+    <React.Fragment>
+      <Header isLogin/>
+      <section className="login">
+        <section className="login__container">
+          <h2>Inicia sesión</h2>
+          <form className="login__container--form" onSubmit={handleSubmit}>
+          <input 
+          name="email"
+          className="input" 
+          type="text" 
+          placeholder="Correo"
+          onChange={handleInput}/>
+          <input
+          email="password"
+          className="input"
+          type="password" 
+          placeholder="Contraseña"
+          onChange={handleInput}/>
+          <button className="button">Iniciar sesión</button>
+          <div className="login__container--remember-me">
+            <label>
+              <input type="checkbox" id="cbox1" value="first_checkbox/"/>Recuérdame
+            </label>
           <a href="/">Olvidé mi contraseña</a>
         </div>
       </form>
@@ -24,6 +55,11 @@ const Login =()=>(
       </section>
       <p className="login__container--register">No tienes ninguna cuenta <Link to="/register">Regístrate</Link></p>
     </section>
-  </section>
-);
-export default Login;
+  </section>  
+    </React.Fragment>
+    
+);}
+const mapDispatchToProps={
+  loginRequest,
+}
+export default connect(null,mapDispatchToProps)(Login);

@@ -1,22 +1,35 @@
 import React,{useState, useEffect} from 'react';
-import Header from '../components/Header';
+import {connect} from 'react-redux';
 import Search from '../components/Search';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
-import Footer from '../components/Footer';
-import useInitialState from '../hooks/useInitialState';
-const API='http://localhost:3000/initalState';
-const Home= ()=>{
-    const initalState=useInitialState(API);
+import Header from '../components/Header';
+const Home= ({mylist,trends,originals})=>{
     return(
         <div className="App">
+            <Header/>
             <Search/>
-            {initalState.trends.length>0 &&(
+            {mylist.length>0 &&(
+            <Categories title="mylist">
+                <Carousel>
+                    {
+                        mylist.map((item)=>{
+                            return(<CarouselItem 
+                                key={item.id}
+                                {...item} 
+                                islist/>)
+                        })
+                    }
+                </Carousel>
+            </Categories>
+            )
+            }
+            {trends.length>0 &&(
             <Categories title="Tendencias">
                 <Carousel>
                     {
-                        initalState.trends.map((item)=>{
+                        trends.map((item)=>{
                             return(<CarouselItem key={item.id} {...item}/>)
                         })
                     }
@@ -25,11 +38,11 @@ const Home= ()=>{
             )
             }
             
-            {initalState.originals.length>0 &&(
+            {originals.length>0 &&(
             <Categories title="Originals">
                 <Carousel>
                     {
-                        initalState.originals.map((item)=>{
+                        originals.map((item)=>{
                             return(<CarouselItem key={item.id} {...item}/>)
                         })
                     }
@@ -40,4 +53,11 @@ const Home= ()=>{
         </div>
     )
 }
-export default Home;
+const mapStateToProps=state=>{
+    return{ 
+        mylist:state.mylist,
+        trends:state.trends,
+        originals:state.originals,
+};
+};
+export default connect(mapStateToProps,null)(Home);
